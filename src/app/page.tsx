@@ -1,113 +1,187 @@
-import Image from "next/image";
+"use client"
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { cn } from "@/lib/utils"
+import { Calendar } from "@/components/ui/calendar"
+import { CalendarIcon } from "@radix-ui/react-icons"
+import { format } from "date-fns"
+import { useRef, useState } from "react"
+import { calculateFileSizeInMb } from "@/utils/calculateFileSizeInMb"
+import { pdfToBlob } from "@/utils/pdfToBlob"
+import { styled } from '@mui/material/styles';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+
 
 export default function Home() {
+
+  const [fileName, setFileName] = useState<string>("")
+  const [category, setCategory] = useState<string>("")
+  const [date, setDate] = useState<Date>()
+  const [file, setFile] = useState<string | ArrayBuffer | null>("")
+  const [fileSize, setFileSize] = useState<string>("")
+
+  const handleSubmit = () => {
+    clearField()
+    console.log(fileName, fileSize, category, date);
+
+  }
+const clearField = () => {
+    setFile("")
+    setCategory("")
+    setFileSize("")
+    setFileName("")
+  }
+  const inputFile = useRef<any>()
+  const handleDrop = async (event: any) => {
+    event.preventDefault();
+    const { files } = event.dataTransfer;
+    if (files.length > 0) {
+      var file = files[0]
+      if (file.type !== "application/pdf") return alert("Please select PDF File only");
+
+      const dataBlob = await pdfToBlob(file);
+      let size = calculateFileSizeInMb(dataBlob.size)
+      setFileSize(size);
+      //converting blob data into dataURL
+      const f = new File([dataBlob], file.name, { type: dataBlob.type })
+      const fr = new FileReader();
+      fr.readAsDataURL(f)
+      fr.onload = () => {
+        const re = fr.result;
+        setFile(re)
+      }
+      // able to select same file  
+      event.target.value = "";
+    }
+  }
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file: File | undefined = e.target.files?.[0];
+    if (file) {
+      // storing file blob data
+      const dataBlob = await pdfToBlob(file);
+      let size = calculateFileSizeInMb(dataBlob.size)
+      setFileSize(size);
+      //converting blob data into dataURL
+      const f = new File([dataBlob], file.name, { type: dataBlob.type })
+      const fr = new FileReader();
+      fr.readAsDataURL(f)
+      fr.onload = () => {
+        const re = fr.result;
+        setFile(re)
+      }
+      // able to select same file  
+      e.target.value = "";
+    }
+  };
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+    <main className="flex min-h-screen flex-col items-center justify-between p-24 "
+      onDrop={handleDrop}
+      onDragOver={(e) => {
+        e.preventDefault()
+      }}
+    >
+      <Card className="flex flex-col items-center justify-center w-[1000px] h-[500px]" >
+        {
+          file ?
+            <Card className="w-[350px] h-[420px]">
+              <CardHeader>
+                <CardTitle>Upload Your File</CardTitle>
+                <CardDescription>Upload your file in database.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form>
+                  <div className="grid w-full items-center gap-4">
+                    <div className="flex flex-col space-y-3">
+                      <Label htmlFor="fileName">File Name</Label>
+                      <Input id="fileName" placeholder="Name of your project" onChange={(e) => setFileName(e.target.value)} />
+                    </div>
+                    <div className="flex flex-row space-x-5 ">
+                      <div className="flex flex-col space-y-3 w-[150px]">
+                        <Label htmlFor="category">File Category</Label>
+                        <Select onValueChange={(e) => setCategory(e)}>
+                          <SelectTrigger id="category">
+                            <SelectValue placeholder="Select" />
+                          </SelectTrigger>
+                          <SelectContent position="popper">
+                            <SelectItem value="PDF">PDF</SelectItem>
+                            <SelectItem value="WORK">WORK</SelectItem>
+                            <SelectItem value="STUDY">STUDY</SelectItem>
+                            <SelectItem value="NOTES">NOTES</SelectItem>
+                            <SelectItem value="SELF">SELF</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="flex flex-col space-y-3 w-[130px]">
+                        <Label htmlFor="fileSize">File Size</Label>
+                        <Input id="fileSize" disabled value={`${fileSize} MB`} />
+                      </div>
+                    </div>
+                    <div className="flex flex-col space-y-3">
+                      <Label htmlFor="name">Select Date</Label>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              " justify-start text-left font-normal",
+                              !date && "text-muted-foreground"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {date ? format(date, "PPP") : <span>Pick a date</span>}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={date}
+                            onSelect={setDate}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                  </div>
+                </form>
+              </CardContent>
+              <CardFooter className="flex justify-between">
+                <Button variant="outline" onClick={() => setFile("")}>Cancel</Button>
+                <Button onClick={handleSubmit}>Upload</Button>
+              </CardFooter>
+            </Card> :
+            <Card className="flex flex-col items-center justify-evenly w-[600px] h-[300px]">
+              <CardTitle className="flex flex-col items-center justify-center">Upload File
+              </CardTitle>
+              <Button variant={"outline"} onClick={() => {
+                // `current` points to the mounted file input element
+                inputFile.current.click();
+              }}>
+                Upload file
+              </Button>
+              <input type='file' onChange={handleFileChange} id='file' accept="application/pdf" ref={inputFile} style={{ display: 'none' }} />
+            </Card>
+        }
+      </Card>
     </main>
   );
 }
+
+
