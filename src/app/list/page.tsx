@@ -35,8 +35,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 import moment from 'moment';
+import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
+import SwapVertIcon from '@mui/icons-material/SwapVert';
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
+import { DateRangePicker } from "../testPage/page";
 const styles = {
     lightHover: {
         "&:hover": {
@@ -232,7 +235,7 @@ export default function PdfListPage() {
 
     // display list by category 
     const getByCategory = (categoryName: string) => {
-        setFileCategory(categoryName); 7
+        setFileCategory(categoryName); 
         filterPdfList(categoryName, startDate, endDate, searchQuery);
     }
 
@@ -432,21 +435,41 @@ export default function PdfListPage() {
             <div className='  w-11/12 h-96 '>
                 <div className="container mx-auto py-6">
                     <div className="w-full" >
-                            <div className="rounded-xl border-2 w-1/3 mb-2 py-1 px-3 ">
-                                {/* <Paper
-                                    component="form"
-                                sx={{ display: 'flex', alignItems: 'center' }} 
-                                > */}
-                                    <SearchIcon />
-                                    <InputBase
-                                        sx={{ ml: 1, flex: 1 ,color:"inherit", width:"7777777"}}
-                                        placeholder="Search File Name"
-                                        value={searchQuery}
-                                        inputProps={{ 'aria-label': 'search google maps' }}
-                                        onChange={searchPdf}
-                                    />
-                                {/* </Paper> */}
+                        <div className="flex flex-row gap-5">
+                            <div className="rounded-xl border-[1px] w-1/3 mb-2  px-3 flex justify-center items-center">
+                                <SearchIcon />
+                                <InputBase
+                                    sx={{ ml: 1, flex: 1, color: "inherit", width: "7777777" }}
+                                    placeholder="Search File Name"
+                                    value={searchQuery}
+                                    inputProps={{ 'aria-label': 'search google maps' }}
+                                    onChange={searchPdf}
+                                />
                             </div>
+                            <div className="rounded-xl w-1/6 mb-2 flex flex-row py-1 items-center">
+                                <SwapVertIcon />
+                                <Select 
+                                    // value={editField.category}
+                                    onValueChange={(e) => getByCategory(e)}  >
+                                    <SelectTrigger id="category" className="focus-visible:ring-offset-0 focus-visible:ring-0 focus-visible:ring-transparent">
+                                        <SelectValue placeholder="Select Category" />
+                                    </SelectTrigger>
+                                    <SelectContent position="popper" >
+                                        {/* <SelectItem value="All files">All Files</SelectItem> */}
+                                        <SelectItem value="All Files">All FILES</SelectItem>
+                                        <SelectItem value="PDF">PDF</SelectItem>
+                                        <SelectItem value="WORK">WORK</SelectItem>
+                                        <SelectItem value="STUDY">STUDY</SelectItem>
+                                        <SelectItem value="NOTES">NOTES</SelectItem>
+                                        <SelectItem value="SELF">SELF</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <FilterAltOffIcon />
+                            </div>
+                            <div className="w-1/5 mb-2 ">
+                            <DateRangePicker/>
+                            </div>
+                        </div>
                         <div className="rounded-xl border-2 ">
                             <TableContainer className="max-h-[500px] min-h-[500px] text-inherit ">
                                 <Table stickyHeader>
