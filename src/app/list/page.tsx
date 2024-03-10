@@ -439,7 +439,7 @@ export default function PdfListPage() {
                                 > */}
                                     <SearchIcon />
                                     <InputBase
-                                        sx={{ ml: 1, flex: 1 ,color:"inherit", width:"90%"}}
+                                        sx={{ ml: 1, flex: 1 ,color:"inherit", width:"7777777"}}
                                         placeholder="Search File Name"
                                         value={searchQuery}
                                         inputProps={{ 'aria-label': 'search google maps' }}
