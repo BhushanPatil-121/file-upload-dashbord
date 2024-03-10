@@ -318,29 +318,7 @@ export default function PdfListPage() {
     return (
         <div className='flex  flex-col items-center justify-between  min-w-full mt-14 '>
 
-            <div style={{ width: "100%" }}>
-                <Paper
-                    // className={styles.searchBar}
-                    component="form"
-                    // sx={{ p: '2px 4px', m: '5px', display: 'flex', alignItems: 'center' }}
-                >
-                    <SearchIcon />
-                    {/* <Input
 
-                        id="fileName"
-                        placeholder="Name of your file"
-                        value={editField.fileName}
-                        onChange={(e) => setEditField({ ...editField, fileName: e.target.value })}
-                    /> */}
-                    <InputBase
-                        sx={{ ml: 1, flex: 1 }}
-                        placeholder="Search File Name"
-                        value={searchQuery}
-                        inputProps={{ 'aria-label': 'search google maps' }}
-                        onChange={searchPdf}
-                    />
-                </Paper>
-            </div>
 
             {showEditPopUp && (
                 <div className="absolute z-50 -mt-14 flex min-h-screen flex-col items-center justify-center  min-w-full  w-11/12 h-96  ">
@@ -452,8 +430,23 @@ export default function PdfListPage() {
                 </div>
             )}
             <div className='  w-11/12 h-96 '>
-                <div className="container mx-auto py-10">
+                <div className="container mx-auto py-6">
                     <div className="w-full" >
+                            <div className="rounded-xl border-2 w-1/3 mb-2 py-1 px-3 ">
+                                {/* <Paper
+                                    component="form"
+                                sx={{ display: 'flex', alignItems: 'center' }} 
+                                > */}
+                                    <SearchIcon />
+                                    <InputBase
+                                        sx={{ ml: 1, flex: 1 ,color:"inherit", width:"90%"}}
+                                        placeholder="Search File Name"
+                                        value={searchQuery}
+                                        inputProps={{ 'aria-label': 'search google maps' }}
+                                        onChange={searchPdf}
+                                    />
+                                {/* </Paper> */}
+                            </div>
                         <div className="rounded-xl border-2 ">
                             <TableContainer className="max-h-[500px] min-h-[500px] text-inherit ">
                                 <Table stickyHeader>
