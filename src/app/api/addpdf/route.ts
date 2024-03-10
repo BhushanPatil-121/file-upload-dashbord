@@ -11,7 +11,7 @@ export async function POST(req: Request){
         const file:any = body.get('file');
         const category:any = body.get('category');
         const fileSize:any = body.get('fileSize');
-        const uploadDate:any = body.get('uploadDate');
+        const uploadDate:any = new Date(body.get('uploadDate')+"");
         
         if(file === "null" && fileName === "null" ){
             return NextResponse.json({success: false, message: "Please Select Different File",status: "401"},{status: 401})
@@ -29,7 +29,7 @@ export async function POST(req: Request){
                 pdf: file,
                 category:category,
                 fileSize: fileSize,
-                uploadDate: new Date(uploadDate)
+                uploadedAt: uploadDate,
             }
         })
         console.log(fileName,  category, fileSize, uploadDate);

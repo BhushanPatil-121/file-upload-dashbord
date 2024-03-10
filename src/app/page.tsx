@@ -27,11 +27,9 @@ import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
-import { useRef, useState } from "react";
+import {  useState } from "react";
 import { calculateFileSizeInMb } from "@/utils/calculateFileSizeInMb";
 import { pdfToBlob } from "@/utils/pdfToBlob";
-import { LightDarkModeToggle } from "@/components/LightDarkModeToggle";
-import NavigationMenuBar from "@/components/NavigationMenuBar";
 
 export default function Home() {
   const [fileName, setFileName] = useState<string>("");
@@ -60,10 +58,8 @@ export default function Home() {
           }),
           {
             pending: 'Uploading File ...',
-            // success: 'Promise resolved 👌',
-            // error: 'Promise rejected 🤯'
           }
-      );
+        );
 
         const result = await body.json();
 
@@ -93,7 +89,6 @@ export default function Home() {
       }
       console.log(fileName, fileSize, category, date);
     } else {
-      clearField();
       setShowMissingFieldError(true);
     }
   };
@@ -114,7 +109,7 @@ export default function Home() {
     if (files.length > 0) {
       var file = files[0];
       if (file.type !== "application/pdf")
-        return alert("Please select PDF File only");
+        toast.warning("Please select PDF File only");
 
       const dataBlob = await pdfToBlob(file);
       let size = calculateFileSizeInMb(dataBlob.size);
@@ -153,15 +148,15 @@ export default function Home() {
   };
   return (
     <main
-      className="flex  flex-col items-center justify-between  min-w-full"
+      className="flex  flex-col items-center justify-between  min-w-full  "
       onDrop={handleDrop}
       onDragOver={(e) => {
         e.preventDefault();
       }}
     >
-      <div className="flex flex-col items-center justify-center  min-w-full mt-16  ">
+      <div className=" flex min-h-screen flex-col items-center justify-center  min-w-full   ">
         {file && (
-          <div className="absolute z-10  flex flex-col items-center justify-center  min-w-full bg-gray-700  bg-opacity-90">
+          <div className=" absolute flex flex-col items-center justify-center min-h-full  min-w-full bg-gray-900  bg-opacity-95">
             <Card className="px-5">
               <CardHeader>
                 <CardTitle className="text-center">
@@ -172,7 +167,7 @@ export default function Home() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form>
+                <form autoComplete="off">
                   <div className="grid w-full items-center gap-4">
                     <div className="flex flex-col space-y-3">
                       <Label htmlFor="fileName" className="flex flex-row">
@@ -184,6 +179,7 @@ export default function Home() {
                         )}
                       </Label>
                       <Input
+                      
                         id="fileName"
                         placeholder="Name of your file"
                         value={fileName}
@@ -267,7 +263,7 @@ export default function Home() {
                   </div>
                 </form>
               </CardContent>
-              <CardFooter className="flex justify-between">
+              <CardFooter className="flex justify-end gap-3">
                 <Button variant="outline" onClick={cancelSubmit}>
                   Cancel
                 </Button>
@@ -277,11 +273,13 @@ export default function Home() {
           </div>
         )}
         <div className="flex flex-col items-center justify-center  min-w-full gap-10">
-          <h2 className="text-center text-4xl font-extrabold relative after:absolute after:-bottom-5 after:h-1 after:w-1/2 after:bg-gray-400 after:left-0 after:right-0 after:mx-auto after:rounded-full">
-            Effortless PDF Upload
-          </h2>
-
-          <h2 className="text-2xl text-center font-normal  p-0.5 leading-7">
+          <div className="flex flex-col items-center justify-center gap-5">
+            <h2 className="font-[sans-serif] text-center text-4xl font-extrabold  ">
+              Effortless PDF Upload
+            </h2>
+            <hr className="w-2/3 border-emerald-500 border-t-4" />
+          </div>
+          <h2 className="font-[sans-serif] text-2xl text-center font-normal  p-0.5 leading-7">
             Seamlessly Store Your Documents in Database
           </h2>
           <div className=" text-center px-4 rounded w-2/3 flex flex-col items-center justify-center cursor-pointer mx-auto font-[sans-serif]">
@@ -315,7 +313,7 @@ export default function Home() {
               />
               <label
                 htmlFor="file"
-                className="block px-6 py-2.5 rounded text-gray-700 text-sm tracking-wider font-semibold border-none outline-none bg-gray-300 hover:bg-gray-200"
+                className="block px-6 py-2.5 rounded text-gray-700 text-sm tracking-wider font-semibold border-none outline-none bg-gray-400 hover:bg-gray-300"
               >
                 Select File
               </label>
