@@ -177,7 +177,7 @@ export default function PdfListPage() {
 
   // handle update api
   const handleEditApi = async () => {
-    if (editField.fileName.length > 0 && editField.category.length > 0 && date) {
+    if (editField.fileName.length > 0 && editFiled.category.length > 0 && date) {
       setShowMissingFieldError(false);
     const formData = new FormData();
     formData.append("id", editField.id);

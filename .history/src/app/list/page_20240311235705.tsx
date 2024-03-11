@@ -177,7 +177,7 @@ export default function PdfListPage() {
 
   // handle update api
   const handleEditApi = async () => {
-    if (editField.fileName.length > 0 && editField.category.length > 0 && date) {
+    if (fileName.length > 0 && category.length > 0 && date) {
       setShowMissingFieldError(false);
     const formData = new FormData();
     formData.append("id", editField.id);
@@ -214,9 +214,6 @@ export default function PdfListPage() {
       toast.error("Error");
       setShowEditPopUp(false);
     }
-  } else {
-    setShowMissingFieldError(true);
-  }
   };
 
   // delete pdf (remove pdf from db)
