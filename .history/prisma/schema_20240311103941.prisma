@@ -1,0 +1,17 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model pdfTable {
+  id         Int      @id @default(autoincrement())
+  fileName   String   @unique
+  fileSize   String
+  pdf        String
+  category   String
+  uploadedAt DateTime @default(now())
+}
