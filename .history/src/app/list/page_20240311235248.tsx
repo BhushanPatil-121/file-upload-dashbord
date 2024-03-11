@@ -539,7 +539,7 @@ export default function PdfListPage() {
                   </div>
                   {clearFilter && (
                     <FilterAltOffIcon
-                      sx={{ cursor: "pointer" , color:"red"}}
+                      sx={{ cursor: "pointer" }}
                       onClick={() => {
                         getByCategory("All Files");
                         setCategoryFilterValue("All Files");
@@ -634,7 +634,7 @@ export default function PdfListPage() {
                   </Button>
                   {startDate && endDate && (
                     <Button variant={"outline"} 
-                    className="text-red-400 hover:text-red-600 "
+                    className="text-red-400 hover:text-red-600 font-bold"
                     onClick={clearDateRangeFilter}>
                       <ResetIcon />
                     </Button>

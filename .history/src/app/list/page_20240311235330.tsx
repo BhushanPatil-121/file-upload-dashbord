@@ -539,7 +539,7 @@ export default function PdfListPage() {
                   </div>
                   {clearFilter && (
                     <FilterAltOffIcon
-                      sx={{ cursor: "pointer" , color:"red"}}
+                      sx={{ cursor: "pointer" . color:"red"}}
                       onClick={() => {
                         getByCategory("All Files");
                         setCategoryFilterValue("All Files");
