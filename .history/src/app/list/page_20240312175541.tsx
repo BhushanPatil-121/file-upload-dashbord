@@ -646,7 +646,7 @@ export default function PdfListPage() {
                       >
                         File
                       </TableCell>
-                      {["Category", "Size", "Upload Date", "Edit", "Action"].map(
+                      {["Category", "Size", "Upload D", "Edit", "Action"].map(
                         (item, index) => (
                           <TableCell
                             key={index}
