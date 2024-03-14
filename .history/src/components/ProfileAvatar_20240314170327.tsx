@@ -1,0 +1,10 @@
+import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+export default  function ProfileAvatar() {
+  
+  return(<Avatar>
+    <AvatarImage src="https://github.com/shadcn.png" />
+    <AvatarFallback>CN</AvatarFallback>
+  </Avatar>);
+}
